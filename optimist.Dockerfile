@@ -15,6 +15,10 @@ RUN apt-get install -y netcat
 # installs libs required for zokrates
 RUN apt-get install -y libgmpxx4ldbl libgmp3-dev
 
+RUN curl -sS https://setup.inaccel.com/repository | sh \
+ && apt install -y coral-api \
+ && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /
 COPY common-files common-files
 COPY config/default.js app/config/default.js

@@ -19,6 +19,10 @@ RUN apt-get install -y netcat curl
 RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get install -y nodejs gcc g++ make
 
+RUN curl -sS https://setup.inaccel.com/repository | sh \
+ && apt install -y coral-api libgmpxx4ldbl \
+ && rm -rf /var/lib/apt/lists/*
+
 ENV ZOKRATES_HOME /app
 ENV ZOKRATES_STDLIB /app/stdlib
 

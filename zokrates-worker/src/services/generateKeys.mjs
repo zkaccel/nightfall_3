@@ -36,8 +36,8 @@ export default async function generateKeys({ filepath, curve = 'bn128' }) {
     await setup(
       `${outputPath}/${circuitDir}/${circuitName}_out`,
       `${outputPath}/${circuitDir}`,
-      'g16',
-      'bellman',
+      'gm17',
+      'libsnark',
       `${circuitName}_vk`,
       `${circuitName}_pk`,
     );

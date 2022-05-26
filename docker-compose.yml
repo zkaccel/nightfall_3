@@ -68,6 +68,14 @@ services:
       USE_STUBS: 'false' # make sure this flag is the same as in deployer service
     command: [ 'npm', 'run', 'dev' ]
 
+  worker-init:
+    command:
+      - bitstream
+      - install
+      - https://store.inaccel.com/artifactory/bitstreams/${BITSTREAM}
+    image: inaccel/cli
+    volumes:
+      - inaccel:/var/lib/inaccel
   worker:
     #  image: 3800decac71d
     image: ghcr.io/eyblockchain/nightfall3-worker:latest
@@ -75,9 +83,13 @@ services:
       - type: volume
         source: proving_files
         target: /app/output/
+      - inaccel:/var/lib/inaccel
 
     depends_on:
-      - deployer
+      deployer:
+        condition: service_started
+      worker-init:
+        condition: service_completed_successfully
     networks:
       - nightfall_network
     environment:
@@ -181,6 +193,8 @@ services:
 
 
 volumes:
+  inaccel:
+    driver: inaccel
   mongodb1: null
   mongodb2: null
   proving_files: null

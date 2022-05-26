@@ -1,10 +1,11 @@
 # build zokrates from source for local verify
-FROM rust:1.53.0 as builder
+FROM rust:1 AS builder
+RUN curl -sS https://setup.inaccel.com/repository | sh \
+ && apt install -y cmake coral-api libboost-all-dev \
+ && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
-COPY . .
-# Zokrates 0.7.10
-RUN git clone --depth 1 --branch 0.7.10 https://github.com/Zokrates/ZoKrates.git
+# Zokrates
+RUN git clone --depth 1 https://github.com/zkaccel/ZoKrates.git
 WORKDIR /app/ZoKrates
-# For Mac Silicon this will default to aarch64-unknown-linux-gnu
-RUN rustup toolchain install nightly
-RUN cargo +nightly build --release
+ENV WITH_LIBSNARK=1
+RUN ./build_release.sh
